@@ -1,0 +1,44 @@
+# configs/pretrain_jepa.yaml
+
+project_name: "Tumor-Aware JEPA Brain MRI Segmentation"
+
+data:
+  data_root: "D:/Brain Tumor Segmentation/data/processed/brisc_segformer_binary"
+
+  train_images: "images/train"
+  val_images: "images/val"
+
+  img_size: 256
+  in_channels: 1
+
+model:
+  img_size: 256
+  patch_size: 16
+  in_channels: 1
+  embed_dim: 192
+  encoder_depth: 4
+  predictor_depth: 2
+  num_heads: 3
+  mlp_ratio: 4.0
+  dropout: 0.0
+
+masking:
+  strategy: "tumor_aware"   # options: tumor_aware, random
+  target_ratio: 0.25
+  saliency_alpha: 4.0
+
+training:
+  seed: 42
+  epochs: 100
+  batch_size: 4
+  num_workers: 2
+  lr: 0.0001
+  weight_decay: 0.05
+  grad_clip: 1.0
+  ema_start: 0.996
+  ema_end: 0.999
+  use_amp: true
+
+  resume_from: "outputs/pretrain_jepa/checkpoints/last_jepa_checkpoint.pth"
+output:
+  out_dir: "outputs/pretrain_jepa"
